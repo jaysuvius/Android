@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.term.termmanager">
+
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".Models.Alarm"></receiver>
+
+        <provider
+            android:name=".Dal.TermProvider"
+            android:authorities="com.example.term.termmanager.Dal.TermProvider"
+            android:exported="false" />
+        <provider
+            android:name=".Dal.CourseProvider"
+            android:authorities="com.example.term.termmanager.Dal.CourseProvider"
+            android:exported="false" />
+        <provider
+            android:name=".Dal.AssessmentProvider"
+            android:authorities="com.example.term.termmanager.Dal.AssessmentProvider"
+            android:exported="false" />
+        <provider
+            android:name=".Dal.MentorProvider"
+            android:authorities="com.example.term.termmanager.Dal.MentorProvider"
+            android:exported="false" />
+        <provider
+            android:name=".Dal.ImageProvider"
+            android:authorities="com.example.term.termmanager.Dal.ImageProvider"
+            android:exported="false" />
+        <provider
+            android:name=".Dal.NoteProvider"
+            android:authorities="com.example.term.termmanager.Dal.NoteProvider"
+            android:exported="false" />
+
+        <activity
+            android:name=".TermsActivity"
+            android:label="@string/title_activity_terms"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CoursesActivity"
+            android:label="@string/title_activity_courses"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MentorsActivity"
+            android:label="@string/title_activity_mentors"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".TermDetailActivity"
+            android:label="@string/title_activity_term_detail"
+            android:parentActivityName=".TermsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.TermsActivity" />
+        </activity>
+        <activity
+            android:name=".CourseDetailActivity"
+            android:label="@string/title_activity_course_detail"
+            android:launchMode="singleTop"
+            android:parentActivityName=".TermDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.TermDetailActivity" />
+        </activity>
+        <activity
+            android:name=".AssessmentDetailActivity"
+            android:label="@string/title_activity_assessment_detail"
+            android:launchMode="singleTop"
+            android:parentActivityName=".CourseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.CourseDetailActivity" />
+            >
+        </activity>
+        <activity
+            android:name=".MentorDetailActivity"
+            android:label="@string/title_activity_mentor_detail"
+            android:parentActivityName=".MentorsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.MentorsActivity" />
+        </activity>
+        <activity
+            android:name=".NoteDetailActivity"
+            android:label="@string/title_activity_notes_detail"
+            android:parentActivityName=".NotesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ImagesActivity"
+            android:label="@string/title_activity_view_images"
+            android:parentActivityName=".CourseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NotesActivity"
+            android:label="@string/title_activity_notes"
+            android:parentActivityName=".CourseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.CourseDetailActivity" />
+        </activity>
+        <activity
+            android:name=".ImageDetailActivity"
+            android:label="@string/title_activity_image_detail"
+            android:parentActivityName=".ImagesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.ImagesActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.AlarmActivity"
+            android:label="Alert!"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.term.termmanager.MainActivity" />
+        </activity>
+    </application>
+
+</manifest>
