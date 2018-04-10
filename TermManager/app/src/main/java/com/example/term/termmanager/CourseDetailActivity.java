@@ -62,6 +62,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     private long termId;
     private MentorController mc;
     private List<Mentor> mentors;
+    private MenuItem menuItem;
+    private long id;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,11 +107,12 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         cc = new CourseController(getApplicationContext());
         Bundle extrasBundle = getIntent().getExtras();
-        long id = 0;
+        id = 0;
         if (!extrasBundle.isEmpty()) {
             id = extrasBundle.getLong("id");
             termId = extrasBundle.getLong("termId");
         }
+
         Uri uri = Uri.parse("content://" + cc._provider.getAuthority() + "/" + cc._provider.get_table() + "/" + id);
         c = (Course) cc.getById(uri);
 
@@ -133,7 +136,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 DatePickerDialog dp = new DatePickerDialog(CourseDetailActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         startDateSetListener,
-                        getYearFromDate(c.get_startDate()), getMonthFromDate(c.get_startDate()), getDayFromDate(c.get_startDate()));
+                        getYearFromDate(c.get_startDate()), getMonthFromDate(c.get_startDate())-1, getDayFromDate(c.get_startDate()));
                 dp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dp.show();
             }
@@ -144,7 +147,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 DatePickerDialog dp = new DatePickerDialog(CourseDetailActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         endDateSetListener,
-                        getYearFromDate(c.get_endDate()), getMonthFromDate(c.get_endDate()), getDayFromDate(c.get_endDate()));
+                        getYearFromDate(c.get_endDate()), getMonthFromDate(c.get_endDate())-1, getDayFromDate(c.get_endDate()));
                 dp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dp.show();
             }
@@ -166,9 +169,10 @@ public class CourseDetailActivity extends AppCompatActivity {
             newCourse();
 
         } else {
+            id = c.getId();
             courseTextBox.setText(c.get_title());
-            startDate.setText(getMonthFromDate(c.get_startDate())+ 1 + "/" + getDayFromDate(c.get_startDate()) + "/" + getYearFromDate(c.get_startDate()));
-            endDate.setText(getMonthFromDate(c.get_endDate())+ 1 + "/" + getDayFromDate(c.get_endDate()) + "/" + getYearFromDate(c.get_endDate()));
+            startDate.setText(getMonthFromDate(c.get_startDate())+ "/" + getDayFromDate(c.get_startDate()) + "/" + getYearFromDate(c.get_startDate()));
+            endDate.setText(getMonthFromDate(c.get_endDate())+ "/" + getDayFromDate(c.get_endDate()) + "/" + getYearFromDate(c.get_endDate()));
 
             startAlert.setChecked(c.is_startAlert());
             endAlert.setChecked(c.is_endAlert());
@@ -221,6 +225,8 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     }
     public void saveMentor() {
+        if(mentorSpinner.getSelectedItem() == null)
+            return;
         mc = new MentorController(getApplicationContext());
         Mentor courseMentor =  (Mentor)mentorSpinner.getSelectedItem();
         for(Mentor m : mentors){
@@ -233,6 +239,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
 
     public void saveCourse() {
+        c.setId(id);
         c.set_title(courseTextBox.getText().toString());
         c.set_startDate(parseShortDate(startDate.getText().toString()));
         c.set_endDate(parseShortDate(endDate.getText().toString()));
@@ -279,6 +286,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        c.setId(id);
                         cc.Delete(c);
                         newCourse();
                         Toast.makeText(CourseDetailActivity.this, "Deleted Course", Toast.LENGTH_LONG).show();
@@ -287,14 +295,29 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_save:
                 saveCourse();
                 break;
             case R.id.action_new:
-                newCourse();
+                if(termId > 0){
+                    newCourse();
+                }
+                else{
+                    new AlertDialog.Builder(this)
+                            .setTitle("Invalid")
+                            .setMessage("Must add courses from term detail view")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    item.setTooltipText("Courses must be added from the term detail view");
+                                    item.setEnabled(false);
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
                 break;
             case R.id.action_delete:
                 deleteCourse();
@@ -322,9 +345,23 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     public void launch_mentor_view(){
-        Intent intent = new Intent(this, MentorDetailActivity.class);
-        intent.putExtra("id", ((Mentor)mentorSpinner.getSelectedItem()).getId());
-        startActivity(intent);
+        if(mentorSpinner.getSelectedItem() != null){
+            Intent intent = new Intent(this, MentorDetailActivity.class);
+            intent.putExtra("id", ((Mentor)mentorSpinner.getSelectedItem()).getId());
+            startActivity(intent);
+        }
+        else{
+            new AlertDialog.Builder(this)
+                    .setTitle("No Mentors")
+                    .setMessage("Must add mentors from the home screen")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+        }
     }
 
     public void launch_view_notes(){

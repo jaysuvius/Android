@@ -9,7 +9,9 @@ public class Assessment extends Entity {
     private int _isObjective;
     private int _isPerformance;
     private Date _goalDate;
-    public int _goalAlert;
+    private int _goalAlert;
+    private Date _dueDate;
+    private int _dueAlert;
 
     public long get_courseId() {
         return _courseId;
@@ -40,7 +42,7 @@ public class Assessment extends Entity {
     }
 
     public void set_isPerformance(int isPerformance) {
-            this._isPerformance = isPerformance;
+        this._isPerformance = isPerformance;
 
     }
 
@@ -57,20 +59,38 @@ public class Assessment extends Entity {
     }
 
     public void set_goalAlert(int isGoalAlert) {
-            this._goalAlert = isGoalAlert;
+        this._goalAlert = isGoalAlert;
     }
 
-    public Assessment(String title, long courseId, int isObjective, int isPerformance, Date goalDate, int goalAlert){
+    public Date get_dueDate() {
+        return _dueDate;
+    }
+
+    public void set_dueDate(Date _dueDate) {
+        this._dueDate = _dueDate;
+    }
+
+    public int is_dueAlert() {
+        return _dueAlert;
+    }
+
+    public void set_dueAlert(int _dueAlert) {
+        this._dueAlert = _dueAlert;
+    }
+
+    public Assessment(String title, long courseId, int isObjective, int isPerformance, Date goalDate, int goalAlert, Date dueDate, int dueAlert) {
         _title = title;
         _courseId = courseId;
         _isObjective = isObjective;
         _isPerformance = isPerformance;
         _goalDate = goalDate;
         _goalAlert = goalAlert;
+        _dueDate = dueDate;
+        _dueAlert = dueAlert;
 
     }
 
-    public Assessment(long id, String title, long courseId, int isObjective, int isPerformance, Date goalDate, int goalAlert){
+    public Assessment(long id, String title, long courseId, int isObjective, int isPerformance, Date goalDate, int goalAlert, Date dueDate, int dueAlert) {
         _id = id;
         _title = title;
         _courseId = courseId;
@@ -78,15 +98,18 @@ public class Assessment extends Entity {
         _isPerformance = isPerformance;
         _goalDate = goalDate;
         _goalAlert = goalAlert;
+        _dueDate = dueDate;
+        _dueAlert = dueAlert;
     }
 
-    public Assessment(){
+    public Assessment() {
 
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return _title;
     }
+
 
 }

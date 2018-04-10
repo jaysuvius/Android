@@ -22,7 +22,8 @@
     <string name="title_activity_notes_detail">Note</string>
     <string name="title_activity_view_images">Images</string>
     <string name="title_activity_notes">Notes</string>
-    <string name="title_activity_image_detail">ImageDetailActivity</string>
+    <string name="title_activity_image_detail">Image</string>
     <string name="DeletedImages">Deleted Image</string>
     <string name="selectImage">Select Image</string>
+    <string name="share">Share</string>
 </resources>

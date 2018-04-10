@@ -51,7 +51,9 @@ public class AssessmentController extends AbstractController {
                 int rtnVal = Update(entity);
             }
             if(entity.is_goalAlert() == 1)
-                Utils.setAssessmentAlarm(_provider.getContext(), entity);
+                Utils.setAssessmentGoalAlarm(_provider.getContext(), entity);
+            if(entity.is_dueAlert() == 1)
+                Utils.setAssessmentDueAlarm(_provider.getContext(), entity);
             return true;
         }
         catch (Exception ex){
@@ -67,7 +69,9 @@ public class AssessmentController extends AbstractController {
                 cursor.getInt(cursor.getColumnIndex(Constants.IS_OBJECTIVE)),
                 cursor.getInt(cursor.getColumnIndex(Constants.IS_PERFORMANCE)),
                 Utils.parseDate(cursor.getString(cursor.getColumnIndex(Constants.ASSESSMENT_GOAL_DATE))),
-                cursor.getInt(cursor.getColumnIndex(Constants.ASSESSMENT_GOAL_ALERT)));
+                cursor.getInt(cursor.getColumnIndex(Constants.ASSESSMENT_GOAL_ALERT)),
+                Utils.parseDate(cursor.getString(cursor.getColumnIndex(Constants.ASSESSMENT_DUE_DATE))),
+                cursor.getInt(cursor.getColumnIndex(Constants.ASSESSMENT_DUE_ALERT)));
     }
 
     @Override
@@ -81,7 +85,8 @@ public class AssessmentController extends AbstractController {
         cv.put(Constants.IS_PERFORMANCE, assessment.is_Performance());
         cv.put(Constants.ASSESSMENT_GOAL_DATE, assessment.get_goalDate().toString());
         cv.put(Constants.ASSESSMENT_GOAL_ALERT, assessment.is_goalAlert());
-
+        cv.put(Constants.ASSESSMENT_DUE_DATE, assessment.get_dueDate().toString());
+        cv.put(Constants.ASSESSMENT_DUE_ALERT, assessment.is_dueAlert());
         return cv;
     }
 
@@ -95,7 +100,8 @@ public class AssessmentController extends AbstractController {
         cv.put(Constants.IS_PERFORMANCE, assessment.is_Performance());
         cv.put(Constants.ASSESSMENT_GOAL_DATE, assessment.get_goalDate().toString());
         cv.put(Constants.ASSESSMENT_GOAL_ALERT, assessment.is_goalAlert());
-
+        cv.put(Constants.ASSESSMENT_DUE_DATE, assessment.get_goalDate().toString());
+        cv.put(Constants.ASSESSMENT_DUE_ALERT, assessment.is_goalAlert());
         return cv;
     }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.term.termmanager.Models.Image;
 import com.example.term.termmanager.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageListAdapter extends BaseAdapter {
@@ -19,7 +20,7 @@ public class ImageListAdapter extends BaseAdapter {
     private int layout;
     private List<Image> imageList;
 
-    public ImageListAdapter(Context context, int layout, List<Image> imageList) {
+    public ImageListAdapter(Context context, int layout, ArrayList<Image> imageList) {
         this.context = context;
         this.layout = layout;
         this.imageList = imageList;

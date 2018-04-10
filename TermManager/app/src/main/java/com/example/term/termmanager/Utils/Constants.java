@@ -51,6 +51,8 @@ public class Constants {
     public static final String IS_PERFORMANCE = "IsPerformance";
     public static final String ASSESSMENT_GOAL_DATE = "GoalDate";
     public static final String ASSESSMENT_GOAL_ALERT = "GoalAlert";
+    public static final String ASSESSMENT_DUE_DATE = "DueDate";
+    public static final String ASSESSMENT_DUE_ALERT = "DueAlert";
     public static final String ASSESSMENT_SORT_COLUMN = "CourseId";
 
 
@@ -61,10 +63,12 @@ public class Constants {
             IS_OBJECTIVE + " INTEGER," +
             IS_PERFORMANCE + " INTEGER," +
             ASSESSMENT_GOAL_DATE + " TEXT,"+
-            ASSESSMENT_GOAL_ALERT + " TEXT"+
+            ASSESSMENT_GOAL_ALERT + " BIT,"+
+            ASSESSMENT_DUE_DATE + " TEXT,"+
+            ASSESSMENT_DUE_ALERT + " BIT"+
             ")";
 
-    public static String[] ASSESSMENT_COLUMNS = {ASSESSMENT_ID, ASSESSMENT_TITLE, ASSESSMENT_COURSE_ID, IS_OBJECTIVE, IS_PERFORMANCE, ASSESSMENT_GOAL_DATE, ASSESSMENT_GOAL_ALERT};
+    public static String[] ASSESSMENT_COLUMNS = {ASSESSMENT_ID, ASSESSMENT_TITLE, ASSESSMENT_COURSE_ID, IS_OBJECTIVE, IS_PERFORMANCE, ASSESSMENT_GOAL_DATE, ASSESSMENT_GOAL_ALERT, ASSESSMENT_DUE_DATE, ASSESSMENT_DUE_ALERT};
 
     public static String[] STATUS_TYPES = {"In Progress", "Completed", "Dropped", "Plan to Take"};
 

@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.term.termmanager.Controllers.AssessmentController;
 import com.example.term.termmanager.Models.Assessment;
+import com.example.term.termmanager.Utils.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -43,14 +45,16 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private RadioButton performanceRadio;
     private TextView goalDateTextview;
     private CheckBox goalAlertCheckbox;
+    private TextView dueDateTextview;
+    private CheckBox dueAlertCheckbox;
     private AssessmentController ac;
     private Date today;
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_entity_detail, menu);
+        getMenuInflater().inflate(R.menu.view_course_menu, menu);
         getMenuInflater().inflate(R.menu.view_notes_menu, menu);
         return true;
     }
@@ -67,8 +71,11 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete:
                 delete();
-               newAssessment();
+                newAssessment();
                 Toast.makeText(AssessmentDetailActivity.this, "Deleted Course", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.action_view_course:
+                launch_view_course();
                 break;
             case R.id.action_view_notes:
                 launch_view_notes();
@@ -108,11 +115,13 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         performanceRadio = findViewById(R.id.performance_radio);
         goalDateTextview = findViewById(R.id.goal_date_textview);
         goalAlertCheckbox = findViewById(R.id.goal_alert_checkbox);
+        dueDateTextview = findViewById(R.id.due_date_textview);
+        dueAlertCheckbox = findViewById(R.id.due_alert_checkbox);
         today = Calendar.getInstance().getTime();
 
         ac = new AssessmentController(getApplicationContext());
         Bundle extrasBundle = getIntent().getExtras();
-        long id = 0;
+
         if (!extrasBundle.isEmpty()) {
             id = extrasBundle.getLong("id");
             courseId = extrasBundle.getLong("courseId");
@@ -121,13 +130,14 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         a = (Assessment) ac.getById(uri);
         if (a == null) {
             newAssessment();
-        }
-        else{
+        } else {
             titleInput.setText(a.get_title());
             objectiveRadio.setChecked(a.is_Objective() == 1);
             performanceRadio.setChecked(a.is_Performance() == 1);
-            goalDateTextview.setText(getMonthFromDate(a.get_goalDate())+1 + "/" + getDayFromDate(a.get_goalDate()) + "/" + getYearFromDate(a.get_goalDate()));
+            goalDateTextview.setText(getMonthFromDate(a.get_goalDate()) + "/" + getDayFromDate(a.get_goalDate()) + "/" + getYearFromDate(a.get_goalDate()));
+            dueDateTextview.setText(getMonthFromDate(a.get_dueDate()) + "/" + getDayFromDate(a.get_dueDate()) + "/" + getYearFromDate(a.get_dueDate()));
             goalAlertCheckbox.setChecked(a.is_goalAlert() == 1);
+            dueAlertCheckbox.setChecked(a.is_dueAlert() == 1);
 
         }
         final DatePickerDialog.OnDateSetListener goalDateSetListener;
@@ -144,7 +154,27 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 DatePickerDialog dp = new DatePickerDialog(AssessmentDetailActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         goalDateSetListener,
-                        getYearFromDate(a.get_goalDate()), getMonthFromDate(a.get_goalDate()), getDayFromDate(a.get_goalDate()));
+                        getYearFromDate(a.get_goalDate()), getMonthFromDate(a.get_goalDate())-1, getDayFromDate(a.get_goalDate()));
+                dp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dp.show();
+            }
+        });
+
+        final DatePickerDialog.OnDateSetListener dueDateSetListener;
+        dueDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                dueDateTextview.setText((month + 1) + "/" + day + "/" + year);
+            }
+        };
+
+        dueDateTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog dp = new DatePickerDialog(AssessmentDetailActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dueDateSetListener,
+                        getYearFromDate(a.get_dueDate()),  getMonthFromDate(a.get_dueDate())-1, getDayFromDate(a.get_dueDate()));
                 dp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dp.show();
             }
@@ -152,8 +182,9 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
     }
 
-    private void launch_view_course(){
-        if(a.getId() == 0){
+
+    private void launch_view_course() {
+        if (a.getId() == 0) {
             Toast.makeText(AssessmentDetailActivity.this, "Save Assessment First", Toast.LENGTH_LONG).show();
             return;
         }
@@ -162,8 +193,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void newAssessment(){
-        if (a == null)   a = new Assessment();
+    private void newAssessment() {
+        if (a == null) a = new Assessment();
         a.setId(0);
         titleInput.setText("");
         a.set_title(titleInput.getText().toString());
@@ -175,18 +206,25 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         goalDateTextview.setText(getMonthFromDate(today) + "/" + getDayFromDate(today) + "/" + getYearFromDate(today));
         goalAlertCheckbox.setChecked(true);
         a.set_goalAlert(goalAlertCheckbox.isChecked() ? 1 : 0);
+        a.set_dueDate(today);
+        dueDateTextview.setText(getMonthFromDate(today) + "/" + getDayFromDate(today) + "/" + getYearFromDate(today));
+        dueAlertCheckbox.setChecked(true);
+        a.set_dueAlert(dueAlertCheckbox.isChecked() ? 1 : 0);
         a.set_courseId(courseId);
 
     }
 
-    private void save(){
+    private void save() {
+        a.setId(id);
         a.set_title(titleInput.getText().toString());
         a.set_isObjective(objectiveRadio.isChecked() ? 1 : 0);
         a.set_isPerformance(performanceRadio.isChecked() ? 1 : 0);
         a.set_goalDate(parseShortDate(goalDateTextview.getText().toString()));
         a.set_goalAlert(goalAlertCheckbox.isChecked() ? 1 : 0);
+        a.set_dueDate(parseShortDate(dueDateTextview.getText().toString()));
+        a.set_dueAlert(dueAlertCheckbox.isChecked() ? 1 : 0);
         a.set_courseId(courseId);
-        if(ac.saveAssessment(a))
+        if (ac.saveAssessment(a))
             Toast.makeText(AssessmentDetailActivity.this, "Saved Assessment", Toast.LENGTH_LONG).show();
     }
 
@@ -198,22 +236,34 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        a.setId(id);
                         ac.Delete(a);
                         newAssessment();
                         Toast.makeText(AssessmentDetailActivity.this, "Deleted Assessment", Toast.LENGTH_LONG).show();
-                    }})
+                    }
+                })
                 .setNegativeButton(android.R.string.no, null).show();
 
     }
 
-    public void launch_view_notes(){
+    public void launch_view_notes() {
+        if (a.getId() == 0) {
+            Toast.makeText(AssessmentDetailActivity.this, "Save Assessment First", Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(this, NotesActivity.class);
         intent.putExtra("assessmentId", a.getId());
         startActivity(intent);
     }
 
-    public void launch_view_images(){
-
+    public void launch_view_images() {
+        if (a.getId() == 0) {
+            Toast.makeText(AssessmentDetailActivity.this, "Save Assessment First", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Intent intent = new Intent(this, ImagesActivity.class);
+        intent.putExtra("assessmentId", a.getId());
+        startActivity(intent);
     }
 
 }

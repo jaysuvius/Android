@@ -1,8 +1,10 @@
 package com.example.term.termmanager;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ public class MentorDetailActivity extends AppCompatActivity {
     long mentor_id;
     Mentor m;
     MentorController mc;
+    CheckBox student_mentor;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,6 +83,7 @@ public class MentorDetailActivity extends AppCompatActivity {
         name = findViewById(R.id.mentor_name_input);
         phone =  findViewById(R.id.mentor_phone_input);
         email = findViewById(R.id.mentor_email_input);
+        student_mentor = findViewById(R.id.student_mentor_checkbox);
 
         mc = new MentorController(getApplicationContext());
         Bundle extrasBundle = getIntent().getExtras();
@@ -96,6 +101,7 @@ public class MentorDetailActivity extends AppCompatActivity {
             name.setText(m.get_name());
             phone.setText(m.get_phone());
             email.setText(m.get_email());
+            getStudentMentorPreference();
         }
 
 
@@ -117,7 +123,26 @@ public class MentorDetailActivity extends AppCompatActivity {
         m.set_phone(phone.getText().toString());
         m.set_email(email.getText().toString());
         if(mc.saveMentor(m)){
+            if(student_mentor.isChecked()){
+                saveStudentMentorPreference();
+            }
             Toast.makeText(MentorDetailActivity.this, "Saved Mentor", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void saveStudentMentorPreference(){
+        if(m.getId() > 0){
+            SharedPreferences sharedPref = this.getPreferences(getApplicationContext().MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putLong("course_mentor_id", m.getId());
+            editor.commit();
+        }
+    }
+
+    private void getStudentMentorPreference(){
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        if(sharedPref.contains("course_mentor_id") && sharedPref.getLong("course_mentor_id",0) == m.getId()){
+            student_mentor.setChecked(true);
         }
     }
 
@@ -134,6 +159,16 @@ public class MentorDetailActivity extends AppCompatActivity {
                         Toast.makeText(MentorDetailActivity.this, "Deleted Mentor", Toast.LENGTH_LONG).show();
                     }})
                 .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putLong("id", m.getId());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
 }

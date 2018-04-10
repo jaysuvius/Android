@@ -11,16 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.example.term.termmanager.Adapters.ImageListAdapter;
 import com.example.term.termmanager.Controllers.ImageController;
 import com.example.term.termmanager.Models.Image;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesActivity extends AppCompatActivity {
 
-    private GridView imagesListView;
+    private ListView imagesListView;
     private Image i;
     private ImageController ic;
     private long id;
@@ -57,6 +59,7 @@ public class ImagesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_images);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagesListView = findViewById(R.id.images_gridview);
         ic = new ImageController(getApplicationContext());
@@ -94,7 +97,7 @@ public class ImagesActivity extends AppCompatActivity {
             images =  ic.getAll();
         }
 
-        ImageListAdapter adapter = new ImageListAdapter(this, R.layout.image_list_layout, images);
+        ImageListAdapter adapter = new ImageListAdapter(this, R.layout.image_list_layout,(ArrayList<Image>) images);
 //
         imagesListView.setAdapter(adapter);
 

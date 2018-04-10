@@ -8,9 +8,9 @@
     <EditText
         android:id="@+id/note_input"
         android:layout_width="352dp"
-        android:layout_height="485dp"
+        android:layout_height="484dp"
         android:ems="10"
         android:inputType="textMultiLine"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteY="17dp" />
 </android.support.constraint.ConstraintLayout>

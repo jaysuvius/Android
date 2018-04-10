@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.term.termmanager.Controllers.NoteController;
 import com.example.term.termmanager.Models.Note;
+import com.example.term.termmanager.Utils.Utils;
 
 public class NoteDetailActivity extends AppCompatActivity {
 
@@ -31,6 +32,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_entity_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_share, menu);
         return true;
     }
 
@@ -46,6 +48,9 @@ public class NoteDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete:
                 deleteNote();
+                break;
+            case R.id.action_share:
+                shareNote();
                 break;
             case android.R.id.home:
                 Intent intent = NavUtils.getParentActivityIntent(this);
@@ -93,6 +98,20 @@ public class NoteDetailActivity extends AppCompatActivity {
             assessmentId = n.get_assessmentId();
         }
 
+    }
+
+    protected void shareNote(){
+        String body = "";
+        if(n!=null && n.get_note() != ""){
+            body = n.get_note();
+        }
+        else if(noteDetail.getText().toString() != ""){
+            body = noteDetail.getText().toString();
+        }
+        if(body.length() > 0)
+            Utils.sendSms(getApplicationContext(), body);
+        else
+            Toast.makeText(NoteDetailActivity.this, "No text to share", Toast.LENGTH_LONG).show();
     }
 
     protected void newNote(){

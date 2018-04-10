@@ -78,8 +78,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                saveImage();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -144,7 +143,8 @@ public class ImageDetailActivity extends AppCompatActivity {
         i.set_image(array);
         i.set_assessmentId(assessmentId);
         i.set_courseId(courseId);
-        ic.saveImage(i);
+        if(ic.saveImage(i))
+            Toast.makeText(ImageDetailActivity.this, "Saved Image", Toast.LENGTH_LONG).show();
     }
 
     protected void newImage(){
@@ -152,6 +152,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         i.setId(0);
         i.set_courseId(courseId);
         i.set_assessmentId(assessmentId);
+        imageView.setImageResource(android.R.color.transparent);
 
     }
 
@@ -163,6 +164,7 @@ public class ImageDetailActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        i.setId(id);
                         ic.Delete(i);
                         newImage();
                         Toast.makeText(ImageDetailActivity.this, R.string.DeletedImages, Toast.LENGTH_LONG).show();

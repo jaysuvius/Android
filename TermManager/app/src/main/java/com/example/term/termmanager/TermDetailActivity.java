@@ -204,6 +204,18 @@ public class TermDetailActivity extends AppCompatActivity {
     }
 
     private void deleteTerm(){
+        if(list.getCount() > 0){
+            new AlertDialog.Builder(this)
+                    .setTitle("Invalid")
+                    .setMessage("To delete term, it must have no courses")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+        }
         new AlertDialog.Builder(this)
                 .setTitle("Confirm")
                 .setMessage("Delete?")

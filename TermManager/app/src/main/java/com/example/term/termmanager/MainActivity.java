@@ -2,6 +2,7 @@ package com.example.term.termmanager;
 
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.example.term.termmanager.Controllers.AssessmentController;
 import com.example.term.termmanager.Controllers.CourseController;
@@ -137,13 +139,13 @@ public class MainActivity extends AppCompatActivity {
 
         AssessmentController ac = new AssessmentController(getApplicationContext());
         ac.DeleteAll();
-        Assessment a1 = new Assessment("Assessment1",c1.getId(), 1, 0, parseDate("Thu May 31 00:00:00 MST 2018"), 1);
+        Assessment a1 = new Assessment("Assessment1",c1.getId(), 1, 0, parseDate("Thu May 31 00:00:00 MST 2018"), 1, parseDate("Thu May 31 00:00:00 MST 2018"), 1);
         rtnVal = ac.Insert(a1);
         a1.setId(ContentUris.parseId(rtnVal));
-        Assessment a2 = new Assessment("Assessment1",c2.getId(), 1, 0, parseDate("Thu May 31 00:00:00 MST 2018"), 1);
+        Assessment a2 = new Assessment("Assessment1",c2.getId(), 1, 0, parseDate("Thu May 31 00:00:00 MST 2018"), 1, parseDate("Thu May 31 00:00:00 MST 2018"), 1);
         rtnVal =  ac.Insert(a2);
         a2.setId(ContentUris.parseId(rtnVal));
-        Assessment a3 = new Assessment("Assessment1",c3.getId(), 1, 0, parseDate("Thu May 31 00:00:00 MST 2018"), 1);
+        Assessment a3 = new Assessment("Assessment1",c3.getId(), 1, 0, parseDate("Thu May 31 00:00:00 MST 2018"), 1, parseDate("Thu May 31 00:00:00 MST 2018"), 1);
         rtnVal = ac.Insert(a3);
         a3.setId(ContentUris.parseId(rtnVal));
 
@@ -162,4 +164,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 }

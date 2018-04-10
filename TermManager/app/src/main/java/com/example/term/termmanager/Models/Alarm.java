@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.widget.Toast;
 import com.example.term.termmanager.R;
@@ -21,8 +22,11 @@ public class Alarm extends BroadcastReceiver {
 
         Bundle extras = intent.getExtras();
         if(extras != null){
-            if (extras.containsKey("alarmText")){
-                alarmText = extras.getString("alarmText");
+            if (extras.containsKey("courseText")){
+                alarmText = extras.getString("courseText");
+            }
+            else if (extras.containsKey("assessmentText")){
+                alarmText = extras.getString("assessmentText");
             }
         }
 
@@ -30,10 +34,14 @@ public class Alarm extends BroadcastReceiver {
         NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         Intent nIntent = new Intent(context, Alarm.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, nIntent, 0);
-        Notification n = new Notification(icon, alarmText, when);
-        n.flags = Notification.FLAG_INSISTENT;
-        nm.notify(NOTIF_ID, n);
-        Toast.makeText(context, "Alarm...", Toast.LENGTH_LONG).show();
+        final Toast tag = Toast.makeText(context, "Alarm..." + alarmText, Toast.LENGTH_LONG);
+        new CountDownTimer(9000, 1000)
+        {
+
+            public void onTick(long millisUntilFinished) {tag.show();}
+            public void onFinish() {tag.show();}
+
+        }.start();
         Vibrator v = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
         v.vibrate(1000);
     }

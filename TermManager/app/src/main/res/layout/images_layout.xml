@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridView
+    <ListView
         android:id="@+id/images_gridview"
         android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
+
 </android.support.constraint.ConstraintLayout>
